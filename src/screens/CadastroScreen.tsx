@@ -1,11 +1,12 @@
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { ref, set } from "firebase/database";
 import React, { useState } from "react";
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { RootStackParamList } from "../../app/(tabs)/index";
-import { auth } from "../services/connectionFirebase";
+import { auth, database } from "../services/connectionFirebase";
 
 const { width } = Dimensions.get("window");
 type NavProp = StackNavigationProp<RootStackParamList>;
@@ -13,10 +14,16 @@ type NavProp = StackNavigationProp<RootStackParamList>;
 export default function HomeScreen() {
     const navigation = useNavigation<NavProp>();
 
+    const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
     const [isError, setIsError] = useState(false);
+
+    const isValidEmail = (email: string) => {
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(email);
+    };
 
     const showMessage = (msg: string, isErr: boolean = false) => {
         setMessage(msg);
@@ -24,15 +31,10 @@ export default function HomeScreen() {
         setTimeout(() => setMessage(""), 3000);
     };
 
-    const isValidEmail = (email: string) => {
-        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return regex.test(email);
-    };
+    const handleRegister = async () => {
+        setMessage("");
 
-    const handleLogin = async () => {
-        showMessage("");
-
-        if (!email || !password) {
+        if (!name || !email || !password) {
             showMessage("Preencha todos os campos!", true);
             return;
         }
@@ -42,21 +44,34 @@ export default function HomeScreen() {
             return;
         }
 
-        try {
-            await signInWithEmailAndPassword(auth, email, password);
-
-            navigation.navigate("Initial");
-        } catch (error: any) {
-            console.error("Erro Firebase:", error.code, error.message);
-            let errorMessage = "Erro ao fazer login. Tente novamente.";
-            if (error.code === 'auth/invalid-email' || error.code === 'auth/wrong-password') {
-                errorMessage = "E-mail ou senha inválidos.";
-            } else if (error.code === 'auth/user-not-found') {
-                errorMessage = "Nenhum usuário encontrado com este e-mail.";
-            }
-            showMessage(errorMessage, true);
+        if (password.length < 6) {
+            showMessage("A senha deve ter pelo menos 6 caracteres!", true);
+            return;
         }
-    };
+
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+
+            if (user) {
+                await set(ref(database, 'users/' + user.uid), {
+                    uid: user.uid,
+                    name: name,
+                    email: email,
+                    createdAt: new Date().toISOString(),
+                }).then(() => {
+                    showMessage("Usuário cadastrado com sucesso!", false);
+
+                    setTimeout(() => {
+                        navigation.goBack();
+                    }, 2000);
+                });
+            }
+
+        } catch (error: any) {
+            showMessage(`Erro ao cadastrar: ${error.message}`, true);
+        }
+    }
 
     return (
         <View style={styles.container}>
@@ -75,10 +90,19 @@ export default function HomeScreen() {
                         textAlign: "center",
                         fontFamily: "Arial",
                         fontWeight: 600,
-                        marginBottom: 30,
+                        marginBottom: 15,
                         opacity: 0.5,
                     }}
-                >Login</Text>
+                >Cadastro</Text>
+                <TextInput
+                    style={styles.inputText}
+                    editable
+                    maxLength={40}
+                    placeholder="Nome:"
+                    placeholderTextColor={"rgba(0,0,0, 0.5)"}
+                    value={name}
+                    onChangeText={setName}
+                />
                 <TextInput
                     style={styles.inputText}
                     editable
@@ -88,16 +112,14 @@ export default function HomeScreen() {
                     placeholderTextColor={"rgba(0,0,0, 0.5)"}
                     value={email}
                     onChangeText={setEmail}
-                    keyboardType="email-address"
-                    autoCapitalize="none"
                 />
                 <TextInput
                     style={styles.inputText}
+                    editable
+                    maxLength={40}
                     placeholder="Senha"
                     placeholderTextColor={"rgba(0,0,0, 0.5)"}
                     secureTextEntry={true}
-                    editable
-                    maxLength={40}
                     value={password}
                     onChangeText={setPassword}
                 />
@@ -108,26 +130,29 @@ export default function HomeScreen() {
                     </View>
                 ) : null}
 
-                <TouchableOpacity
-                    onPress={() => navigation.navigate("Cadastro")}
+                <View
                     style={{
-                        left: -98,
-                    }}>
-                    <Text
-                        style={{
-                            color: "#0004FF",
-                            marginLeft: 20,
-                            fontFamily: "Arial",
-                            opacity: 0.5,
-                            fontWeight: 600,
-                        }}
-                    >Cadastrar-se?</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.button}
-                    onPress={handleLogin}>
-                    <Text style={styles.buttonText}>Entrar</Text>
-                </TouchableOpacity>
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "center",
+                        marginTop: 15
+                    }}
+                >
+
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={() => navigation.navigate("Home")}
+                    >
+                        <Text style={styles.buttonText}>Voltar</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={handleRegister}
+                    >
+                        <Text style={styles.buttonText}>Cadastro</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </View>
     );
@@ -169,7 +194,7 @@ const styles = StyleSheet.create({
         marginBottom: 150
     },
 
-    messageBox: {
+        messageBox: {
         paddingVertical: 10,
         paddingHorizontal: 15,
         borderRadius: 15,
@@ -192,7 +217,7 @@ const styles = StyleSheet.create({
 
     button: {
         backgroundColor: "rgba(0, 0, 0, 0.2)",
-        padding: 10,
+        padding: 5,
         margin: 7,
         borderRadius: 12,
         borderWidth: 1,

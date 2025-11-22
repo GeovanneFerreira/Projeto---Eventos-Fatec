@@ -20,16 +20,16 @@ export default function HomeScreen() {
           <View>
             <TouchableOpacity
               style={styles.card}
-              onPress={() => navigation.navigate("Login")}
+              onPress={() => navigation.navigate("Home")}
             >
-                <Text style={styles.texto}>Hoje</Text>
+              <Text style={styles.texto}>Hoje</Text>
             </TouchableOpacity>
           </View>
 
           <View>
             <TouchableOpacity
               style={styles.card}
-              onPress={() => navigation.navigate("Login")}
+              onPress={() => navigation.navigate("Home")}
             >
               <Text style={styles.texto}>Programados</Text>
             </TouchableOpacity>
@@ -38,7 +38,7 @@ export default function HomeScreen() {
           <View>
             <TouchableOpacity
               style={styles.card}
-              onPress={() => navigation.navigate("Login")}
+              onPress={() => navigation.navigate("Home")}
             >
               <Text style={styles.texto}>Todos</Text>
             </TouchableOpacity>
@@ -46,7 +46,7 @@ export default function HomeScreen() {
           <View>
             <TouchableOpacity
               style={styles.card}
-              onPress={() => navigation.navigate("Login")}
+              onPress={() => navigation.navigate("Home")}
             >
               <Text style={styles.texto}>Sinalizados</Text>
             </TouchableOpacity>
@@ -56,7 +56,7 @@ export default function HomeScreen() {
         <Text style={styles.subtitulo}>Minhas Listas</Text>
 
         <View style={styles.listas}>
-          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+          <TouchableOpacity onPress={() => navigation.navigate("Home")}>
             <View style={styles.itemLista}>
               <View style={styles.iconeTexto}>
                 <Image
@@ -72,7 +72,7 @@ export default function HomeScreen() {
 
           <View style={styles.linha}></View>
 
-          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+          <TouchableOpacity onPress={() => navigation.navigate("Home")}>
             <View style={styles.itemLista}>
               <View style={styles.iconeTexto}>
                 <Image
@@ -88,7 +88,7 @@ export default function HomeScreen() {
 
           <View style={styles.linha}></View>
 
-          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+          <TouchableOpacity onPress={() => navigation.navigate("Home")}>
             <View style={styles.itemLista}>
               <View style={styles.iconeTexto}>
                 <Image
@@ -104,7 +104,7 @@ export default function HomeScreen() {
 
           <View style={styles.linha}></View>
 
-          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+          <TouchableOpacity onPress={() => navigation.navigate("Home")}>
             <View style={styles.itemLista}>
               <View style={styles.iconeTexto}>
                 <Image
@@ -120,7 +120,7 @@ export default function HomeScreen() {
 
           <View style={styles.linha}></View>
 
-          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+          <TouchableOpacity onPress={() => navigation.navigate("Home")}>
             <View style={styles.itemLista}>
               <View style={styles.iconeTexto}>
                 <Image
@@ -136,8 +136,33 @@ export default function HomeScreen() {
         </View>
       </View>
 
+      <TouchableOpacity
+        onPress={() => navigation.navigate("NewEvent")}
+        style={{
+          position: "absolute",
+          justifyContent: "center",
+          right: 15,
+          bottom: 13,
+          backgroundColor: "rgba(0, 0, 0, 0.3)",
+          padding: 10,
+          borderRadius: 50,
+          marginTop: 15,
+          elevation: 8,
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+        }}
+      >
+        <Image
+          source={require("../../assets/images/plus.png")}
+          style={styles.iconesRodape}
+          resizeMode="contain"
+        />
+      </TouchableOpacity>
+
       <View style={styles.menuRodape}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("Initial")}>
           <Image
             source={require("../../assets/images/home.png")}
             style={styles.iconesRodape}
@@ -147,7 +172,7 @@ export default function HomeScreen() {
 
         <View style={styles.linhaHorizontal}></View>
 
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("Calendar")}>
           <Image
             source={require("../../assets/images/calendario.png")}
             style={styles.iconesRodape}
@@ -157,7 +182,9 @@ export default function HomeScreen() {
 
         <View style={styles.linhaHorizontal}></View>
 
-        <TouchableOpacity>
+        <TouchableOpacity
+        onPress={() => navigation.navigate("Events")}
+        >
           <Image
             source={require("../../assets/images/historico.png")}
             style={styles.iconesRodape}
@@ -186,6 +213,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#EEECEC",
     width: "100%",
     height: "100%",
+    paddingBottom: 15,
   },
 
   topo: {},
