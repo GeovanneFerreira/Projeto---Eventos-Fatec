@@ -76,7 +76,7 @@ export default function HomeScreen() {
     return (
         <View style={styles.container}>
             <Image
-                source={require("../../assets/images/historico.png")}
+                source={require("../../assets/images/Logo.png")}
                 style={styles.logo}
                 resizeMode="contain"
             />

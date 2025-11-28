@@ -14,4 +14,6 @@
 
 3. If you want to run in a web
 
- --npm run web
+   ```bash
+   npm run web
+   ```

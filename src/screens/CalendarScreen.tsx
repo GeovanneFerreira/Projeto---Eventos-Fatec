@@ -4,11 +4,11 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { RootStackParamList } from "../../app/(tabs)/index";
 
+
 type NavProp = StackNavigationProp<RootStackParamList>;
 
 export default function HomeScreen() {
   const navigation = useNavigation<NavProp>();
-
 
   return (
     <View style={styles.all}>
@@ -49,7 +49,14 @@ export default function HomeScreen() {
         </View>
 
         <View style={styles.container}>
-          
+            <Image
+            source={require("../../assets/images/CalendarEvent.png")}
+              style={{
+                width: 400,
+                height: 300
+              }}
+              resizeMode="contain"
+            />
         </View>
 
         <View style={styles.container}>
@@ -150,54 +157,6 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        <View style={styles.container}>
-          <Text style={styles.eventText}>Palestra Teatro Municipal</Text>
-          <View>
-            <Text style={{ fontWeight: 700, color: "rgba(0, 0, 0, 0.8)" }}>
-              Data: 22/11/2025
-            </Text>
-            <Text style={{ fontWeight: 700, color: "rgba(0, 0, 0, 0.8)" }}>
-              Hora: 14:00
-            </Text>
-          </View>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-              gap: 10,
-              marginTop: 15,
-              marginLeft: 90,
-            }}
-          >
-            <TouchableOpacity
-              style={[
-                styles.button,
-                {
-                  backgroundColor: "#49A25D",
-                  display: "flex",
-                  flexDirection: "row",
-                  alignItems: "center",
-                },
-              ]}
-            >
-              <Image
-                source={require("../../assets/images/correto.png")}
-                style={{
-                  width: 30,
-                  height: 20,
-                }}
-                resizeMode="contain"
-              />
-              <Text style={{ color: "#FFFFFF" }}>Check-in</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.button, { backgroundColor: "#4451DD" }]}
-            >
-              <Text style={{ color: "#FFFFFF" }}>Adicionar Lembrete?</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
       </View>
 
       <View style={styles.menuRodape}>
@@ -231,7 +190,7 @@ export default function HomeScreen() {
 
         <View style={styles.linhaHorizontal}></View>
 
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("Perfil")}>
           <Image
             source={require("../../assets/images/perfil.png")}
             style={styles.iconesRodape}
@@ -250,6 +209,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#EEECEC",
     width: "100%",
     height: "100%",
+    paddingBottom: 70
   },
 
   topo: {},

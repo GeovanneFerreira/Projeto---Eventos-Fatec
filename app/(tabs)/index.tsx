@@ -6,14 +6,15 @@ import EventsScreen from "../../src/screens/EventsScreen";
 import HomeScreen from "../../src/screens/HomeScreen";
 import InitialScreen from "../../src/screens/InitialScreen";
 import NewEventScreen from "../../src/screens/NewEventScreen";
+import PerfilScreen from "../../src/screens/PerfilScreen";
 export type RootStackParamList = {
   Home: undefined;
   Cadastro: undefined;
-  Perfil: undefined;
   Initial: undefined;
   NewEvent: undefined;
   Calendar: undefined;
   Events: undefined;
+  Perfil: undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -27,6 +28,7 @@ export default function RootStack() {
       <Stack.Screen name="NewEvent" component={NewEventScreen} />
       <Stack.Screen name="Calendar" component={CalendarScreen} />
       <Stack.Screen name="Events" component={EventsScreen} />
+      <Stack.Screen name="Perfil" component={PerfilScreen} />
     </Stack.Navigator>
   );
 }

@@ -214,7 +214,7 @@ export default function HomeScreen() {
 
         <View style={styles.linhaHorizontal}></View>
 
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("Perfil")}>
           <Image
             source={require("../../assets/images/perfil.png")}
             style={styles.iconesRodape}

@@ -4,13 +4,13 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { Checkbox } from "expo-checkbox";
 import { useState } from "react";
 import {
-    Image,
-    Platform,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Image,
+  Platform,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { RootStackParamList } from "../../app/(tabs)/index";
 
@@ -387,7 +387,7 @@ export default function HomeScreen() {
           />
         </TouchableOpacity>
         <View style={styles.linhaHorizontal}></View>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("Perfil")}>
           <Image
             source={require("../../assets/images/perfil.png")}
             style={styles.iconesRodape}
